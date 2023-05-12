@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:lvtn_mangxahoi/utils/colors.dart';
 import 'package:lvtn_mangxahoi/utils/global_variables.dart';
 
+import '../utils/global_variables.dart';
+
 class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({Key? key}) : super(key: key);
 
@@ -21,15 +23,18 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     super.initState();
     pageController = PageController();
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     pageController.dispose();
   }
+
   void navigationTapped(int page) {
     pageController.jumpToPage(page);
   }
+
   void onPageChanged(int page) {
     setState(() {
       _page = page;
@@ -46,6 +51,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
         onPageChanged: onPageChanged,
       ),
       bottomNavigationBar: CupertinoTabBar(
+        backgroundColor: mobileBackgroundColor,
         items: [
           BottomNavigationBarItem(
             icon: Icon(
