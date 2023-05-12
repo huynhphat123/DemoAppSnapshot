@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lvtn_mangxahoi/utils/colors.dart';
+import 'package:lvtn_mangxahoi/utils/global_variables.dart';
 
 class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({Key? key}) : super(key: key);
@@ -39,13 +40,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
-        children: [
-          Text('Home'),
-          Text('Search'),
-          Text('Post'),
-          Text('Notifi'),
-          Text('User'),
-        ],
+        children: HomeScreenItems,
         controller: pageController,
         // physics: const NeverScrollableScrollPhysics(),
         onPageChanged: onPageChanged,
