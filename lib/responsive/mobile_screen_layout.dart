@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -50,49 +51,71 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
         // physics: const NeverScrollableScrollPhysics(),
         onPageChanged: onPageChanged,
       ),
-      bottomNavigationBar: CupertinoTabBar(
+      bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: mobileBackgroundColor,
+        animationDuration: Duration(milliseconds: 300),
+        height: 60,
         items: [
-          BottomNavigationBarItem(
-            icon: Icon(
+          Icon(
               Icons.home,
-              color: _page == 0 ? primaryColor : secondaryColor,
+              color: _page == 0 ? blackColor : secondaryColor,
             ),
-            backgroundColor: primaryColor,
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
+            Icon(
               Icons.search,
-              color: _page == 1 ? primaryColor : secondaryColor,
+              color: _page == 1 ? blackColor : secondaryColor,
             ),
-            backgroundColor: primaryColor,
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
+            Icon(
               Icons.add_circle,
-              color: _page == 2 ? primaryColor : secondaryColor,
+              color: _page == 2 ? blackColor : secondaryColor,
             ),
-            backgroundColor: primaryColor,
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
+            Icon(
               Icons.notifications,
-              color: _page == 3 ? primaryColor : secondaryColor,
+              color: _page == 3 ? blackColor : secondaryColor,
             ),
-            backgroundColor: primaryColor,
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
+            Icon(
               Icons.person,
-              color: _page == 4 ? primaryColor : secondaryColor,
+              color: _page == 4 ? blackColor : secondaryColor,
             ),
-            backgroundColor: primaryColor,
-            label: '',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(
+          //     Icons.home,
+          //     color: _page == 0 ? primaryColor : secondaryColor,
+          //   ),
+          //   backgroundColor: primaryColor,
+          //   label: '',
+          // ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(
+          //     Icons.search,
+          //     color: _page == 1 ? primaryColor : secondaryColor,
+          //   ),
+          //   backgroundColor: primaryColor,
+          //   label: '',
+          // ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(
+          //     Icons.add_circle,
+          //     color: _page == 2 ? primaryColor : secondaryColor,
+          //   ),
+          //   backgroundColor: primaryColor,
+          //   label: '',
+          // ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(
+          //     Icons.notifications,
+          //     color: _page == 3 ? primaryColor : secondaryColor,
+          //   ),
+          //   backgroundColor: primaryColor,
+          //   label: '',
+          // ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(
+          //     Icons.person,
+          //     color: _page == 4 ? primaryColor : secondaryColor,
+          //   ),
+          //   backgroundColor: primaryColor,
+          //   label: '',
+          // ),
         ],
         onTap: navigationTapped,
       ),
