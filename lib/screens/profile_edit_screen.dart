@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hex_color/flutter_hex_color.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lvtn_mangxahoi/resources/firestore_method.dart';
-import 'package:lvtn_mangxahoi/resources/firestore_methods.dart';
 
 class profileEditScreen extends StatefulWidget {
   final userData;
@@ -64,6 +63,7 @@ class _profileEditScreenState extends State<profileEditScreen> {
       body: Column(
         children: [
           Container(
+             
             child: Column(children: [
               SizedBox(
                 height: 20,

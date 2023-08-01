@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:lvtn_mangxahoi/provider/user_provider.dart';
 import 'package:lvtn_mangxahoi/screens/login_screen.dart';
 import 'package:lvtn_mangxahoi/screens/signup_screen.dart';
+import 'package:lvtn_mangxahoi/utils/sharedpreference.dart';
 import 'package:provider/provider.dart';
 
 import 'responsive/mobile_screen_layout.dart';
@@ -14,6 +15,7 @@ import 'utils/colors.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await sharedPreferences.initPreference();
   if (kIsWeb) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
@@ -46,7 +48,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Instagram',
+        title: 'Snapshare',
         debugShowCheckedModeBanner: false,
         theme: ThemeData.dark()
             .copyWith(scaffoldBackgroundColor: mobileBackgroundColor),
@@ -59,7 +61,7 @@ class MyApp extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.active) {
               if (snapshot.hasData) {
-                return const ResponsiveLayout(
+                return ResponsiveLayout(
                   mobileScreenLayout: MobileScreenLayout(),
                   webScreenLayout: WebScreenLayout(),
                 );
@@ -72,7 +74,8 @@ class MyApp extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(
-                  color: primaryColor,
+                  // color: primaryColor,
+                  color: secondaryColor,
                 ),
               );
             }

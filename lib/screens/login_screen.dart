@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lvtn_mangxahoi/resources/auth_method.dart';
+import 'package:lvtn_mangxahoi/responsive/mobile_screen_layout.dart';
+import 'package:lvtn_mangxahoi/responsive/responsive_layout_screen.dart';
+import 'package:lvtn_mangxahoi/responsive/web_screen_layout.dart';
 import 'package:lvtn_mangxahoi/screens/signup_screen.dart';
-import 'package:lvtn_mangxahoi/utils/colors.dart';
-import 'package:lvtn_mangxahoi/widgets/text_field_input.dart';
 
-import '../resources/auth_method.dart';
-import '../responsive/mobile_screen_layout.dart';
-import '../responsive/responsive_layout_screen.dart';
-import '../responsive/web_screen_layout.dart';
-import '../utils/utils.dart';
+import 'package:lvtn_mangxahoi/utils/utils.dart';
+
+import 'package:lvtn_mangxahoi/utils/sharedpreference.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,27 +17,40 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final Color kAccentColor = Colors.teal;
+  bool _obscureText = true;
+  bool isLoading = false;
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool isLoading = false;
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+  }
+
+  void iniitShared() async {
+    await sharedPreferences.initPreference();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    iniitShared();
   }
 
   void loginUser() async {
     setState(() {
       isLoading = true;
     });
-    String res = await AuthMethod().loginUser(
+    String res = await aut.loginUser(
       email: _emailController.text,
       password: _passwordController.text,
     );
     if (res == 'success') {
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => const ResponsiveLayout(
@@ -48,6 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
     } else {
+      // ignore: use_build_context_synchronously
       showSnackBar(context, res);
     }
     setState(() {
@@ -58,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void navigateToSignUp() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => SignupScreen(),
+        builder: (context) => const SignupScreen(),
       ),
     );
   }
@@ -67,88 +80,162 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
+        child: SingleChildScrollView(
           child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 32),
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Flexible(
-              child: Container(),
-              flex: 2,
-            ),
-            SvgPicture.asset(
-              'assets/ic_instagram.svg',
-              color: primaryColor,
-              height: 64,
-            ),
-            const SizedBox(height: 64),
-            TextFieldInput(
-                textEditingController: _emailController,
-                hintText: 'Enter your email',
-                textInputType: TextInputType.emailAddress),
-            const SizedBox(height: 24),
-            TextFieldInput(
-              textEditingController: _passwordController,
-              hintText: 'Enter your password',
-              textInputType: TextInputType.visiblePassword,
-              isPass: true,
-            ),
-            const SizedBox(height: 24),
-            InkWell(
-              onTap: loginUser,
-              child: Container(
-                child: isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          color: primaryColor,
-                        ),
-                      )
-                    : Text('Login'),
-                width: double.infinity,
-                alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(vertical: 12),
-                decoration: const ShapeDecoration(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(4),
-                    ),
-                  ),
-                  color: blueColor,
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Flexible(
-              child: Container(),
-              flex: 2,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            height: MediaQuery.of(context).size.height,
+            width: double.infinity,
+            color: const Color.fromARGB(255, 196, 250, 253),
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  child: Text("Don't have an account?"),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8,
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/logoSnapshot.png',
+                      width: 250.0,
+                      height: 250.0,
+                    ),
+                    _buildTextField(
+                      textEditingController: _emailController,
+                      hintText: 'Email',
+                      icon: Icons.email,
+                      textInputType: TextInputType.emailAddress,
+                    ),
+                    const SizedBox(height: 16.0),
+                    _buildTextField(
+                      textEditingController: _passwordController,
+                      hintText: 'Mật khẩu',
+                      icon: Icons.lock,
+                      obscureText: _obscureText,
+                      isPassword: true,
+                      textInputType: TextInputType.visiblePassword,
+                    ),
+                    const SizedBox(height: 32.0),
+                    InkWell(
+                      onTap: loginUser,
+                      child: Container(
+                        width: double.infinity,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        decoration: const ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(30),
+                            ),
+                          ),
+                          // color: Color.fromARGB(255, 91, 165, 226),
+                          color: Color.fromARGB(255, 15, 145, 211),
+                        ),
+                        child: isLoading
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.blueAccent,
+                                ),
+                              )
+                            : const Text(
+                                'ĐĂNG NHẬP',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                      ),
+                    ),
+                  ],
                 ),
-                GestureDetector(
-                  onTap: navigateToSignUp,
-                  child: Container(
-                    child: Text(
-                      "Sign up",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                      ),
+                      child: const Text(
+                        "Bạn chưa có tài khoản? ",
+                        style: TextStyle(color: Colors.black),
+                      ),
                     ),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8,
+                    GestureDetector(
+                      onTap: navigateToSignUp,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                        ),
+                        child: const Text(
+                          "Đăng ký tại đây",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.black),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
-      )),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController textEditingController,
+    required String hintText,
+    required IconData icon,
+    required TextInputType textInputType,
+    bool obscureText = false,
+    bool isPassword = false,
+    int maxLines = 1,
+  }) {
+    return TextField(
+      controller: textEditingController,
+      keyboardType: textInputType,
+      obscureText: obscureText,
+      maxLines: maxLines,
+      style: const TextStyle(color: Colors.black),
+      decoration: InputDecoration(
+        fillColor: Colors.white,
+        filled: true,
+        hintText: hintText,
+        hintStyle: const TextStyle(color: Colors.grey),
+        prefixIcon: Icon(
+          icon,
+          color: Colors.grey,
+        ),
+        suffixIcon: isPassword
+            ? IconButton(
+                icon: Icon(
+                  _obscureText ? Icons.visibility_off : Icons.visibility,
+                  color: Colors.grey,
+                ),
+                onPressed: () {
+                  // đảo ngược trạng thái của obscureText khi nhấn vào biểu tượng con mắt
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+              )
+            : null,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              // color: Theme.of(context).accentColor,
+              ),
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(
+            // color: Theme.of(context).accentColor,
+            color: Colors.blueAccent,
+          ),
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+      ),
     );
   }
 }

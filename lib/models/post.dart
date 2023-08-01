@@ -1,16 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Post {
-  final String description;
-  final String uid;
-  final String username;
-  final likes;
-  final String postId;
-  final DateTime datePublished;
-  final String postUrl;
-  final String profImage;
+  late String description;
+  late String uid;
+  late String username;
+  late List likes;
+  late List saves;
+  late String postId;
+  late DateTime datePublished;
+  late String postUrl;
+  late String profImage;
+  late List titlePost;
+  late int timestamp;
 
-  const Post({
+  Post({
+    required this.saves,
     required this.description,
     required this.uid,
     required this.username,
@@ -19,6 +23,8 @@ class Post {
     required this.datePublished,
     required this.postUrl,
     required this.profImage,
+    required this.titlePost,
+    required this.timestamp,
   });
 
   static Post fromSnap(DocumentSnapshot snap) {
@@ -32,7 +38,10 @@ class Post {
         datePublished: snapshot["datePublished"],
         username: snapshot["username"],
         postUrl: snapshot['postUrl'],
-        profImage: snapshot['profImage']);
+        profImage: snapshot['profImage'],
+        saves: snapshot['saves'],
+        titlePost: snapshot['titlePost'],
+        timestamp: snapshot['timestamp']);
   }
 
   Map<String, dynamic> toJson() => {
@@ -43,6 +52,23 @@ class Post {
         "postId": postId,
         "datePublished": datePublished,
         'postUrl': postUrl,
-        'profImage': profImage
+        'profImage': profImage,
+        'saves': saves,
+        'titlePost': titlePost,
+        'timestamp': timestamp,
       };
+
+  Post.fromJson(Map<String, dynamic> json) {
+    datePublished = json['datePublished'] ?? '';
+    saves = json['saves'] ?? [];
+    description = json['description'] ?? '';
+    uid = json['uid'] ?? '';
+    postUrl = json['postUrl'] ?? '';
+    username = json['username'] ?? '';
+    likes = json['likes'] ?? [];
+    profImage = json['profImage'] ?? '';
+    postId = json['postId'] ?? '';
+    titlePost = json['titlePost'] ?? [];
+    timestamp = json['timestamp'] ?? [];
+  }
 }

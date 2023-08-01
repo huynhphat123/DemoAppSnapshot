@@ -7,7 +7,7 @@ import '../resources/auth_method.dart';
 
 class UserProvider with ChangeNotifier {
   User? _user;
-  final AuthMethod _authMethods = AuthMethod();
+  AuthMethod _authMethods = aut;
 
   User get getUser => _user!;
 

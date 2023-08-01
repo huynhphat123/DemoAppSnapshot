@@ -21,8 +21,8 @@ class BackgroungHome extends StatelessWidget {
                 height: 469,
                 width: 680,
                 decoration: BoxDecoration(
-                  // color: k2MainThemeColor,
-                  color: k2AccentStroke,
+                  color: k2MainThemeColor,
+                  // color: k2AccentStroke,
                   borderRadius: BorderRadius.circular(152.0),
                 ),
               ),

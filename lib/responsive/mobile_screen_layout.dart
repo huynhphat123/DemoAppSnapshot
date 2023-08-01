@@ -3,8 +3,18 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:lvtn_mangxahoi/resources/firestore_methods.dart';
+import 'package:lvtn_mangxahoi/screens/add_post_screen.dart';
+import 'package:lvtn_mangxahoi/screens/feed_screen.dart';
+import 'package:lvtn_mangxahoi/screens/home_screen.dart';
+import 'package:lvtn_mangxahoi/screens/notification_screen.dart';
+import 'package:lvtn_mangxahoi/screens/profile_screen.dart';
+import 'package:lvtn_mangxahoi/screens/search_screen.dart';
 import 'package:lvtn_mangxahoi/utils/colors.dart';
 import 'package:lvtn_mangxahoi/utils/global_variables.dart';
+import 'package:lvtn_mangxahoi/utils/key_shared.dart';
+import 'package:lvtn_mangxahoi/utils/sharedpreference.dart';
 
 import '../utils/global_variables.dart';
 
@@ -20,10 +30,22 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   late PageController pageController;
   @override
   void initState() {
-    
     super.initState();
     pageController = PageController();
+    FireStoreMethods.getSelfInfo();
+    SystemChannels.lifecycle.setMessageHandler((message) {
+      if (FireStoreMethods.Auth.currentUser != null) {
+        if (message.toString().contains('resume')) {
+          FireStoreMethods.updateActiveStatus(true);
+        }
+        if (message.toString().contains('pause')) {
+          FireStoreMethods.updateActiveStatus(false);
+        }
+      }
+      return Future.value(message);
+    });
   }
+  
 
   @override
   void dispose() {
@@ -34,6 +56,20 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
 
   void navigationTapped(int page) {
     pageController.jumpToPage(page);
+  }
+  List<Widget> getList(){
+    String a =sharedPreferences.getString(keyShared.CURRENTUSER);
+    return [
+  // const Text('Notifications'),
+  const HomeScreen(),
+  const SearchScreen(),
+  const AddPostScreen(),
+  const notificationScreen(),
+  ProfileScreen(
+     uid: sharedPreferences.getString(keyShared.CURRENTUSER),
+  ),
+];
+
   }
 
   void onPageChanged(int page) {
@@ -46,13 +82,14 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
-        children: HomeScreenItems,
+        children: getList(),
         controller: pageController,
-        // physics: const NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         onPageChanged: onPageChanged,
       ),
       bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: mobileBackgroundColor,
+        backgroundColor: kWhite,
+        color: k2MainThemeColor,
         animationDuration: Duration(milliseconds: 300),
         height: 60,
         items: [
